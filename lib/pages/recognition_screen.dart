@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_to_text_app/utils/utils.dart';
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen({super.key});
@@ -12,11 +13,14 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Text Recognition'),
+        title: Text(
+          'Text Recognition',
+          style: myTextStyle(30, const Color(0xff1738EB), FontWeight.bold),
+        ),
         centerTitle: true,
-        backgroundColor: const Color(0xFFF8F9FB),
+        backgroundColor: myPrimaryColor,
       ),
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: myPrimaryColor,
       body: const SingleChildScrollView(
         child: Center(
           child: Column(
