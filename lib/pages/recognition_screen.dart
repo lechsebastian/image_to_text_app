@@ -10,6 +10,20 @@ class RecognitionScreen extends StatefulWidget {
 class _RecognitionScreenState extends State<RecognitionScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Text Recognition'),
+        centerTitle: true,
+        backgroundColor: const Color(0xFFF8F9FB),
+      ),
+      backgroundColor: const Color(0xFFF8F9FB),
+      body: const SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [],
+          ),
+        ),
+      ),
+    );
   }
 }
