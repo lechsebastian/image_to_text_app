@@ -12,19 +12,62 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            backgroundColor: Colors.deepPurple.shade400,
+            onPressed: () {},
+            child: Icon(
+              Icons.copy,
+              size: 28,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(width: 10),
+          FloatingActionButton(
+            backgroundColor: Colors.deepPurple.shade400,
+            onPressed: () {},
+            child: Icon(
+              Icons.reply,
+              size: 34,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
       appBar: AppBar(
         title: Text(
           'Text Recognition',
-          style: myTextStyle(30, const Color(0xff1738EB), FontWeight.bold),
+          style: myTextStyle(
+              35, Colors.deepPurple.withOpacity(0.8), FontWeight.w800),
         ),
         centerTitle: true,
         backgroundColor: myPrimaryColor,
       ),
       backgroundColor: myPrimaryColor,
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [],
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Image(
+                width: 256,
+                height: 256,
+                image: AssetImage('images/add_file.png'),
+                color: Colors.deepPurple.shade400,
+              ),
+              SizedBox(
+                height: 130,
+              ),
+              Text(
+                'Lorem ipsum',
+                style: myTextStyle(
+                    25, Colors.deepPurple.withOpacity(0.8), FontWeight.w600),
+              )
+            ],
           ),
         ),
       ),

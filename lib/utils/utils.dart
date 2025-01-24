@@ -15,3 +15,4 @@ TextStyle myTextStyle(
 }
 
 Color myPrimaryColor = const Color(0xffF8F9FB);
+
