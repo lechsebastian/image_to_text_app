@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_to_text_app/utils/utils.dart';
 
 class RecognitionScreen extends StatefulWidget {
@@ -9,6 +12,51 @@ class RecognitionScreen extends StatefulWidget {
 }
 
 class _RecognitionScreenState extends State<RecognitionScreen> {
+  File? pickedImage;
+
+  optionsDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          children: [
+            SimpleDialogOption(
+              child: Text(
+                'Gallery',
+                style: myTextStyle(20, Colors.black, FontWeight.w800),
+              ),
+              onPressed: () => pickImage(ImageSource.gallery),
+            ),
+            SimpleDialogOption(
+              child: Text(
+                'Camera',
+                style: myTextStyle(20, Colors.black, FontWeight.w800),
+              ),
+              onPressed: () => pickImage(ImageSource.camera),
+            ),
+            SimpleDialogOption(
+              child: Text(
+                'Cancel',
+                style: myTextStyle(20, Colors.black, FontWeight.w800),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  pickImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return;
+    setState(() {
+      pickedImage = File(image!.path);
+    });
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,14 +101,20 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               SizedBox(
                 height: 50,
               ),
-              Image(
-                width: 256,
-                height: 256,
-                image: AssetImage('images/add_file.png'),
-                color: Colors.deepPurple.shade400,
+              InkWell(
+                onTap: () => optionsDialog(context),
+                child: Image(
+                  width: 256,
+                  height: 256,
+                  image: pickedImage == null
+                      ? AssetImage('images/add_file.png')
+                      : FileImage(pickedImage!),
+                  color:
+                      pickedImage == null ? Colors.deepPurple.shade400 : null,
+                ),
               ),
               SizedBox(
-                height: 130,
+                height: 80,
               ),
               Text(
                 'Lorem ipsum',
