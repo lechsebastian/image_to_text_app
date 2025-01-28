@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:io' as Io;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_to_text_app/utils/api_key.dart';
 import 'package:image_to_text_app/utils/utils.dart';
+import 'package:http/http.dart' as http;
 
 class RecognitionScreen extends StatefulWidget {
   const RecognitionScreen({super.key});
@@ -51,10 +56,25 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     final image = await ImagePicker().pickImage(source: source);
     if (image == null) return;
     setState(() {
-      pickedImage = File(image!.path);
+      pickedImage = File(image.path);
     });
 
     Navigator.pop(context);
+
+    // Prepare the image
+    Uint8List bytes = await Io.File(pickedImage!.path).readAsBytes();
+    String img64 = base64Encode(bytes);
+
+    // Send the image to the server
+    String url = 'https://api.ocr.space/parse/image';
+    var data = {'base64Image': 'data:image/png;base64,$img64'};
+    var header = {'apikey': apiKey};
+    http.Response response =
+        await http.post(Uri.parse(url), body: data, headers: header);
+
+    // Get the response
+    Map result = jsonDecode(response.body);
+    print(result['ParsedResults'][0]['ParsedText']);
   }
 
   @override
