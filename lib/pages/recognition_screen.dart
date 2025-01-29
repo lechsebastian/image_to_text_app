@@ -18,6 +18,8 @@ class RecognitionScreen extends StatefulWidget {
 
 class _RecognitionScreenState extends State<RecognitionScreen> {
   File? pickedImage;
+  bool scanning = false;
+  String scanedText = '';
 
   optionsDialog(BuildContext context) {
     return showDialog(
@@ -56,6 +58,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     final image = await ImagePicker().pickImage(source: source);
     if (image == null) return;
     setState(() {
+      scanning = true;
       pickedImage = File(image.path);
     });
 
@@ -75,6 +78,10 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     // Get the response
     Map result = jsonDecode(response.body);
     print(result['ParsedResults'][0]['ParsedText']);
+    setState(() {
+      scanning = false;
+      scanedText = result['ParsedResults'][0]['ParsedText'];
+    });
   }
 
   @override
@@ -136,11 +143,17 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
               SizedBox(
                 height: 80,
               ),
-              Text(
-                'Lorem ipsum',
-                style: myTextStyle(
-                    25, Colors.deepPurple.withOpacity(0.8), FontWeight.w600),
-              )
+              scanning
+                  ? Text(
+                      'Scanning..',
+                      style: myTextStyle(25, Colors.deepPurple.withOpacity(0.8),
+                          FontWeight.w600),
+                    )
+                  : Text(
+                      scanedText,
+                      style: myTextStyle(25, Colors.deepPurple.withOpacity(0.8),
+                          FontWeight.w600),
+                    ),
             ],
           ),
         ),
