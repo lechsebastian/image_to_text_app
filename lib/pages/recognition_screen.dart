@@ -4,6 +4,7 @@ import 'dart:io' as Io;
 import 'dart:typed_data';
 
 import 'package:clipboard/clipboard.dart';
+import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_to_text_app/utils/api_key.dart';
@@ -116,7 +117,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
           SizedBox(width: 10),
           FloatingActionButton(
             backgroundColor: Colors.deepPurple.shade400,
-            onPressed: () {},
+            onPressed: () => Share.text('OCR', scanedText, 'text/plain'),
             child: Icon(
               Icons.reply,
               size: 34,
