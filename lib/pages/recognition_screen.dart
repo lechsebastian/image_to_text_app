@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:io' as Io;
 import 'dart:typed_data';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_to_text_app/utils/api_key.dart';
@@ -70,7 +71,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     // Send the image to the server
     String url = 'https://api.ocr.space/parse/image';
-    var data = {'base64Image': 'data:image/png;base64,$img64'};
+    var data = {'base64Image': 'data:image/jpeg;base64,$img64'};
     var header = {'apikey': apiKey};
     http.Response response =
         await http.post(Uri.parse(url), body: data, headers: header);
@@ -92,7 +93,20 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
         children: [
           FloatingActionButton(
             backgroundColor: Colors.deepPurple.shade400,
-            onPressed: () {},
+            onPressed: () {
+              FlutterClipboard.copy(scanedText)
+                  .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'The text is copied.',
+                            style:
+                                myTextStyle(18, Colors.white, FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                          duration: Duration(milliseconds: 600),
+                        ),
+                      ));
+            },
             child: Icon(
               Icons.copy,
               size: 28,
