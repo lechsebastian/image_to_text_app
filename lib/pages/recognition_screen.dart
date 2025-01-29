@@ -1,3 +1,5 @@
+// ignore_for_file: library_prefixes, use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:io' as Io;
@@ -57,7 +59,12 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
   }
 
   pickImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
+    final image = await ImagePicker().pickImage(
+      source: source,
+      maxHeight: 800,
+      maxWidth: 800,
+      imageQuality: 85,
+    );
     if (image == null) return;
     setState(() {
       scanning = true;
@@ -72,17 +79,23 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
 
     // Send the image to the server
     String url = 'https://api.ocr.space/parse/image';
-    var data = {'base64Image': 'data:image/jpeg;base64,$img64'};
+    var data = {'base64Image': 'data:image/jpg;base64,$img64'};
     var header = {'apikey': apiKey};
     http.Response response =
         await http.post(Uri.parse(url), body: data, headers: header);
 
     // Get the response
     Map result = jsonDecode(response.body);
-    print(result['ParsedResults'][0]['ParsedText']);
     setState(() {
       scanning = false;
-      scanedText = result['ParsedResults'][0]['ParsedText'];
+
+      if (result.containsKey('ParsedResults') &&
+          result['ParsedResults'] != null) {
+        scanedText =
+            result['ParsedResults'][0]['ParsedText'] ?? 'No text found';
+      } else {
+        scanedText = 'OCR failed or no text detected.';
+      }
     });
   }
 
